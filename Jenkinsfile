@@ -24,7 +24,14 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                sh 'mvn sonar:sonar -Dsonar.token=sqa_7ca51cd60b771b362742bde590364eeeeaf9b621 -Dmaven.test.skip=true'
+                withCredentials([
+                    string(
+                        credentialsId: 'Sonar_token',
+                        variable: 'SONAR_TOKEN'
+                    )
+                ]) {
+                    sh 'mvn sonar:sonar -Dsonar.token=${SONAR_TOKEN} -Dmaven.test.skip=true'
+                }
             }
         }
 
